@@ -1,0 +1,19 @@
+version: 2
+formats: all
+sphinx:
+  configuration: conf.py
+python:
+  install:
+    - requirements: requirements
+
+search:
+  ranking:
+    # Deprecated content
+    api/v1.html: -1
+    config-file/v1.html: -1
+
+    # Internal documentation
+    development/design/*: -5
+
+    # Useful content, but not something we want most users finding
+    custom_installs/*: -6
