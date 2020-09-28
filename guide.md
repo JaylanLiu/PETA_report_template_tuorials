@@ -29,15 +29,22 @@ pypeta：pypeta是BGI-PETA数据库团队开发发布的Python软件包，是BGI
 cell：cell是jupyter notebook中的内容最小组织单元。一个cell包括In和Out两个部分，In部分用于输入内容，Out部分用于显示代码的运行结果，包括可视化和结果输出。cell有类型属性，代码属性的cell用来组织代码，可运行并产生结果，结果产生于Cell的Out部分，markdown属性的cell用来渲染markdown格式的文本，运行后直接生成渲染后的文档，去除In和Out的标识。
 
 
-tag：tag是对cell添加的标签，用以对cell进行标记指导后续jupyter_web_reprot模块对notebook的显示控制。jupyter_web_report目前支持四种标签控制cell在结果html中的显示行为，带“hide”标签的cell不显示，带“output”标签的cell只显示运行结果的Out部分，不显示In的部分，不带以上两种标签的cell同时显示In和Out部分。tag也可惟用于标识cell的功能，如“description”标签标示cell是当前notebook的说明文档。
+tag：tag是对cell添加的标签，用以对cell进行标记指导后续jupyter_web_reprot模块对notebook的显示控制。jupyter_web_report目前支持四种标签控制cell在结果html中的显示行为，带“hide”标签的cell不显示，带“output”标签的cell只显示运行结果的Out部分，不显示In的部分，不带以上两种标签的cell同时显示In和Out部分。tag也可用于标识cell中代码的功能，如“interaction”标签标示cell是当前notebook与数据库进行交互的代码。
+   | tag    | 报告中cell表现      |
+   | ------ | ------------------- |
+   | 无tag  | 显示In和Out         |
+   | hide   | 不显示              |
+   | output | 只显示Out，不显示In |
+
 
 结果html：指jwr驱动运行模板后生成的网页结果。
 
 
 
 ## 写作规范
-PETA数据库支持基于Python和基于R语言制作分析模板，提供可利用的参考示例。基于Python的模板示例见[https://github.com/JaylanLiu/PETA_report_template__Python__Product_statistics](https://github.com/JaylanLiu/PETA_report_template__Python__Product_statistics)，基于R语言的模板示例见[https://github.com/JaylanLiu/PETA_report_template__R__genome_landscape](https://github.com/JaylanLiu/PETA_report_template__R__genome_landscape)。示例模板中给出了模板与BGI-PETA数据库的交互代码，该部分代码在制作新模板时可复用。
+PETA数据库支持基于Python和基于R语言制作分析模板，提供可复用的参考示例。基于Python的模板示例见[https://github.com/JaylanLiu/PETA_report_template__Python__Product_statistics](https://github.com/JaylanLiu/PETA_report_template__Python__Product_statistics)，基于R语言的模板示例见[https://github.com/JaylanLiu/PETA_report_template__R__genome_landscape](https://github.com/JaylanLiu/PETA_report_template__R__genome_landscape)。示例模板中给出了模板与BGI-PETA数据库的交互代码，该部分代码在制作新模板时可复用。
 
+**用户制作模板时，建议从github下载示例模板，复用模板中的前三个cell，从第四个cell起开始分析代码。**
 
 以下详细介绍中默认以基于Python的模板做为示例，基于R的模板有特殊用法需要注意时会同时给出基于R的模板的示例。
 
@@ -56,6 +63,15 @@ PETA报告模板是一个文件夹，代码与文档封装到一个jupyter noteb
 README.md文件中的内容组成该模板的说明文档。模板说明文档中要写明模板的主题，创建人及联系方式，使用的分析方法和分析内容，支持的数据集，模板使用jwr调用的命令行等信息。
 
 ![](imgs/readme.png)
+
+### Jupyter notebook标签设置
+如用户从头开始启动jupyter notebook，按如下步骤做设置：
+1. 启动本地jupyter服务，以R kernel新建笔记本
+    ![](imgs/new.png)
+2. 调出标签模式。
+
+    菜单栏->单元格工具栏-->Tags
+    ![](imgs/addtag.png)
 
 ### 参数化
 模板需要从Jupyter notebook外部传入的参数加测试时缺省值依次写入第一个cell中，并认“parameters” tag 标记该cell。“parameters”标记的cell不显示在结果html中。
@@ -112,3 +128,6 @@ jwr驱动模板运行代码时，以cell为单元，按照顺序执行每个cell
 2. 然后jwr控制依序运行各个CELL。引入pypeta包，在第三个cell中根据当前用户的token和圈选数据的json字符串从PETA数据库中申请取回数据，转换为pandas DataFrame数据结构后将临床信息和突变数据分别存储于cli和mut变量中，供下游分析使用。下游分析及可视化代码对cli和mut中的数据进行加工处理生成结果。
 
 3. jwr 收集汇总各cell的输出，根据cell的tag确定cell的显示行为，格式化成为html文档。
+
+
+
